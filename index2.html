@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
+        var timeThrough = 0;
+        function fantasyBaseball() {
+            timeThrough += 1;
+            timeThroughString = timeThrough.toString()
+            player = prompt("Who do you want to know about?");
+            year = prompt("What year would you like to view?");
+            var possibleYears = ["2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005"];
+            var validYear = false;
+            var validStat = false;
+            if(possibleYears.indexOf(year) != -1)
+            {
+                validYear=true;
+            }
+            while(!validYear) {
+                year = prompt("Please enter a year between 2005 and 2015");
+                if(possibleYears.indexOf(year) != -1)
+                {
+                    validYear=true;
+                }
+            }
+            stat = prompt("What stat do you want?");
+            var possibleStats = ["playerID", "yearID", "stint", "teamID", "CHN", "lgID", "NL", "W", "L", "G", "GS", "CG", "SHO", "SV", "IPouts", "H", "ER", "HR", "BB", "SO", "BAOpp", "ERA", "IBB", "WP", "HBP", "BK", "BFP", "GF", "R", "SH", "SF", "GIDP"]
+
+            if(possibleStats.indexOf(stat) != -1)
+            {
+                validStat=true;
+            }
+            while(!validStat) {
+                stat = prompt("Please enter a valid statistic: W, L, G, GS, CG, SHO, SV, IPouts, H, ER, HR, BB, SO, ERA");
+                if(possibleStats.indexOf(year) != -1)
+                {
+                    validYear=true;
+                }
+            }
+
+            $.getJSON("master.json", function (result1) {
+                $.each(result1, function (key1, value1) {
+                    $.getJSON("pitching.json", function (result) {
+                        $.each(result, function (key, value) {
+                            if (value1.playerID == value.playerID && value.yearID == year && value1.nameLast == player) {
+                                //  document.write(value1.nameFirst + " " + value1.nameLast + " " + eval("value." + stat) + "<br/>");
+                                $("#statval" + timeThroughString).text(eval("value." + stat));
+                                return false;
+                            }
+                            //document.write(Math.floor((Math.random() * 10) + 1));
+                        });
+                    });
+                    //if (value1.nameLast == player) {
+                    //return false
+                    //}
+                });
+            });
+            $("#stat" + timeThroughString).text(stat);
+            $("#player" + timeThroughString).text(player);
+            $("#year" + timeThroughString).text(year);
+        }
+    </script>
+</head>
+<body>
+
+<table border = "2px">
+    <thead>
+    <tr>
+        <th colspan="3">Cool Fantasy Baseball Thing</th>
+    </tr>
+    </thead>
+    <tr>
+        <td>Player Name</td>
+        <td>Year</td>
+        <td id="stat1"></td>
+    </tr>
+    <tr>
+        <td id="player1"></td>
+        <td id="year1"></td>
+        <td id="statval1"></td>
+    </tr>
+    <tr>
+        <td id="player2"></td>
+        <td id="year2"></td>
+        <td id="statval2"></td>
+    </tr>
+    <tr>
+        <td id="player3"></td>
+        <td id="year3"></td>
+        <td id="statval3"></td>
+    </tr>
+</table>
+<div id = "myid"><button onclick="fantasyBaseball()">Add Player</button></div>
+</body>
+</html>

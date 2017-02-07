@@ -1,0 +1,29 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("button").click(function(){
+                $.getJSON("master.json", function(result) {
+                    $.each(result, function (key, value) {
+                        if ($("#name").val() == value.nameLast) {
+                            $.getJSON("pitching.json", function(pResult) {
+                                $.each(pResult, function (pKey, pValue) {
+                                    if(value.playerID == pValue.playerID) {
+                                        $("#output").text(pValue.ERA);
+                                    }
+                                });
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<input type="text" id="name" onfocus="if(this.value == 'Enter a Name') { this.value = ''; }" value="Aardsma" />
+<button>Get JSON data</button>
+<div id="output">hello</div>
+</body>
+</html>
